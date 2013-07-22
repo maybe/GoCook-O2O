@@ -1,8 +1,12 @@
 package com.m6.o2o;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MainActivity extends Activity {
 
@@ -10,7 +14,54 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		setOnListeners();
 	}
 
-
+	private void setOnListeners() {
+		findViewById(R.id.deliver).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.this, DeliverActivity.class));
+			}
+		});
+		
+		findViewById(R.id.overtime).setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						startActivity(new Intent(MainActivity.this, OvertimeActivity.class));
+					}
+				});
+		
+		findViewById(R.id.log).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.this, LogActivity.class));
+			}
+		});
+		
+		findViewById(R.id.logout).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				logout();
+			}
+		});
+	}
+	
+	private void logout() {
+		new AlertDialog.Builder(this)
+        .setTitle(R.string.biz_main_exit_title)
+        .setMessage(R.string.biz_main_exit_message)
+        .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	MainActivity.this.finish();
+            }
+        })
+        .setNegativeButton(R.string.cancel, null)
+        .create()
+        .show();
+	}
 }

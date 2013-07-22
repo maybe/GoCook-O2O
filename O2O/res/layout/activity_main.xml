@@ -21,7 +21,7 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/delivery"
+                android:id="@+id/deliver"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/activity_main_button_height"
                 android:layout_weight="1"

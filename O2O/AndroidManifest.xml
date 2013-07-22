@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.m6.o2o.DeliveryActivity"
+            android:name="com.m6.o2o.DeliverActivity"
             android:label="@string/title_activity_delivery" >
         </activity>
         <activity

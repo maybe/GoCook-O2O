@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
-public class DeliveryActivity extends Activity {
+public class DeliverActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_delivery);
+		setContentView(R.layout.activity_deliver);
 	}
 
 	@Override
