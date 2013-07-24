@@ -9,8 +9,38 @@
     tools:context=".DeliverActivity" >
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tip"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/deliver_result" />
 
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tip" />
+    
+    <Button
+        android:id="@+id/scan"
+        android:text="@string/scan"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/result"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    
+    <Button
+        android:id="@+id/unpacking"
+        android:text="@string/unpacking"
+        android:layout_below="@id/scan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+    
+    <Button
+        android:id="@+id/exit"
+        android:text="@string/exit"
+        android:layout_below="@id/unpacking"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>
