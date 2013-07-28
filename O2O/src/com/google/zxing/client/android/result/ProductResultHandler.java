@@ -17,12 +17,16 @@
 package com.google.zxing.client.android.result;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.google.zxing.Result;
+import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.result.ExpandedProductParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ProductParsedResult;
+import com.m6.o2o.BizModel;
 import com.m6.o2o.R;
 
 /**
@@ -36,21 +40,22 @@ public final class ProductResultHandler extends ResultHandler {
       R.string.button_web_search,
       R.string.button_custom_product_search
   };
-
+  
   public ProductResultHandler(Activity activity, ParsedResult result, Result rawResult) {
     super(activity, result, rawResult);
-    showGoogleShopperButton(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        ProductParsedResult productResult = (ProductParsedResult) getResult();
-        openGoogleShopper(productResult.getNormalizedProductID());
-      }
-    });
+//    showGoogleShopperButton(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View view) {
+//        ProductParsedResult productResult = (ProductParsedResult) getResult();
+//        openGoogleShopper(productResult.getNormalizedProductID());
+//      }
+//    });
   }
 
   @Override
   public int getButtonCount() {
-    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
+//    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
+	  return 3;
   }
 
   @Override
@@ -71,13 +76,19 @@ public final class ProductResultHandler extends ResultHandler {
     }
     switch (index) {
       case 0:
-        openProductSearch(productID);
+//        openProductSearch(productID);
+    	Intent intent = new Intent();
+    	intent.putExtra(BizModel.ACTIVITY_RESULT, getDisplayContents());
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        getActivity().finish();
         break;
       case 1:
-        webSearch(productID);
+//        webSearch(productID);
+    	  ((CaptureActivity) getActivity()).restartPreviewAfterDelay(0L);
         break;
       case 2:
-        openURL(fillInCustomSearchURL(productID));
+//        openURL(fillInCustomSearchURL(productID));
+        getActivity().finish();
         break;
     }
   }

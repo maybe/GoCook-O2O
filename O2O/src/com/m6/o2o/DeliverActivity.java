@@ -16,6 +16,8 @@ import com.google.zxing.client.android.CaptureActivity;
 
 public class DeliverActivity extends Activity {
 
+	private String mResultCode;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,8 +53,9 @@ public class DeliverActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RESULT_OK) {
-			((TextView) findViewById(R.id.result)).setText(data.getExtras().getString("result"));
+		if (resultCode == RESULT_OK && data != null) {
+			mResultCode = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
+			((TextView) findViewById(R.id.result)).setText(mResultCode);
 		}
 	}
 	

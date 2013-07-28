@@ -14,18 +14,21 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:textSize="16sp"
         android:text="@string/deliver_result" />
 
     <TextView
         android:id="@+id/result"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:gravity="center"
         android:layout_below="@id/tip" />
     
     <Button
         android:id="@+id/scan"
         android:text="@string/scan"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_below="@id/result"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
