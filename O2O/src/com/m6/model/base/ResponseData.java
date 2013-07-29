@@ -25,9 +25,9 @@ public class ResponseData {
 		
 		try {
 			JSONObject responseJson = new JSONObject(response);
-			flag = responseJson.optInt("flag");
-			msg = responseJson.optString("msg");
-			data = responseJson.optString("data");
+			flag = responseJson.optInt("Flag");
+			msg = responseJson.optString("Msg");
+			data = responseJson.optString("Data");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

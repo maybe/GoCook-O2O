@@ -3,14 +3,16 @@ package com.m6.model.base;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.m6.util.SecurityUtils;
+
 
 public class RequestData {
 
 	private static final int AppId = 1;
 	
-	private static final String Key = "DAB578EC-6C01-4180-939A-37E6BE8A81AF";
+	private static final String AppKey = "DAB578EC-6C01-4180-939A-37E6BE8A81AF";
 	
-	private static final String IV = "117A5C0F-7036-476f-B789-01BBA998D0CF";
+	private static final String AppIV = "117A5C0F-7036-476f-B789-01BBA998D0CF";
 	
 	private int cmd;
 	
@@ -19,10 +21,10 @@ public class RequestData {
 	private String md5;
 	
 
-	public RequestData(int cmd, String data) {
+	public RequestData(int cmd, BaseData data) {
 		this.cmd = cmd;
-		this.data = data;
-		this.md5 = md5Encry();
+		this.data = data.getJsonData();
+		this.md5 = SecurityUtils.MD5Encry(AppKey + this.cmd + AppId + this.data + AppIV);
 	}
 
 	public int getCmd() {
@@ -47,10 +49,6 @@ public class RequestData {
 
 	public void setMd5(String md5) {
 		this.md5 = md5;
-	}
-	
-	public String md5Encry() {
-		return null;
 	}
 	
 	public String getPostData() {

@@ -194,7 +194,7 @@ public class LoginActivity extends Activity {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			CLoginInfo cLoginInfo = new CLoginInfo(mEmail, mPassword);
-			RequestData requestData = new RequestData(Cmd.AUTHEN, cLoginInfo.getData());
+			RequestData requestData = new RequestData(Cmd.AUTHEN, cLoginInfo);
 			NetUtils.httpPost("", requestData.getPostData());
 			return true;
 		}

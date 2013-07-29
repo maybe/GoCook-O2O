@@ -34,7 +34,7 @@ public class CLoginInfo extends BaseData {
 	}
 
 	@Override
-	public String getData() {
+	public String getJsonData() {
 		try {
 			JSONObject postJsonObject = new JSONObject();
 			postJsonObject.put("account", account);

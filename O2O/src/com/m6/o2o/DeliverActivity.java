@@ -7,16 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.zxing.client.android.CaptureActivity;
+import com.m6.model.biz.BizModel;
 
 public class DeliverActivity extends Activity {
 
-	private String mResultCode;
+	private String mResultContainerNo;
+	private String mResultDeliveryNo;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,9 @@ public class DeliverActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				new UnpackingTask(DeliverActivity.this).execute((Void) null);
+				new OpenBoxTask(DeliverActivity.this, mResultContainerNo, mResultDeliveryNo).execute((Void) null);
 				unPacking.setClickable(false);
+				unPacking.setEnabled(false);
 			}
 		});
 	}
@@ -54,34 +58,48 @@ public class DeliverActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && data != null) {
-			mResultCode = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
-			((TextView) findViewById(R.id.result)).setText(mResultCode);
+			TextView result = (TextView) findViewById(R.id.result);
+			mResultContainerNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
+			result.setText(mResultContainerNo);
+			
+			result.setVisibility(View.VISIBLE);
+			findViewById(R.id.tip).setVisibility(View.VISIBLE);
 		}
 	}
 	
-	private void bindData() {
-		
+	private void bindData(String resultInfo) {
+		if (!TextUtils.isEmpty(resultInfo)) {
+			TextView error = (TextView) findViewById(R.id.error);
+			error.setText(resultInfo);
+			
+			error.setVisibility(View.VISIBLE);
+			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
+		}
 	}
 	
-	private static class UnpackingTask extends AsyncTask<Void, Void, Void> {
+	private static class OpenBoxTask extends AsyncTask<Void, Void, String> {
 
 		private WeakReference<DeliverActivity> mActivity;
-		public UnpackingTask(DeliverActivity activity) {
+		private String mContainerNo;
+		private String mDeliveryNo;
+		
+		public OpenBoxTask(DeliverActivity activity, String containerNo, String deliveryNo) {
 			mActivity = new WeakReference<DeliverActivity>(activity);
+			mContainerNo = containerNo;
+			mDeliveryNo = deliveryNo;
 		}
 		
 		@Override
-		protected Void doInBackground(Void... params) {
-			
-			return null;
+		protected String doInBackground(Void... params) {
+			return BizModel.openBox(BizModel.getStaffId(mActivity.get()), mContainerNo, mDeliveryNo);
 		}
 		
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			if (mActivity != null) {
 				DeliverActivity activity = mActivity.get();
 				if (activity != null) {
-					activity.bindData();
+					activity.bindData(result);
 				}
 			}
 		}

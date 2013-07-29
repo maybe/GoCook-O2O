@@ -20,6 +20,7 @@
     <string name="exit">返回</string>
     
     <string name="deliver_result">扫描结果：</string>
+    <string name="deliver_error_tip">错误信息：</string>
     <string name="scan">配送扫描</string>
     <string name="unpacking">开箱</string>
     

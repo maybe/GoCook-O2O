@@ -1,5 +1,7 @@
 package com.m6.o2o;
 
+import com.m6.model.biz.BizModel;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -57,6 +59,7 @@ public class MainActivity extends Activity {
         .setMessage(R.string.biz_main_exit_message)
         .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+            	BizModel.clearStaffId(MainActivity.this);
             	MainActivity.this.finish();
             }
         })
