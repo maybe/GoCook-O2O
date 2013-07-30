@@ -21,20 +21,32 @@ public class DeliverActivity extends Activity {
 	private String mResultContainerNo;
 	private String mResultDeliveryNo;
 	
+	private static final int RESULT_ORDER = 0;
+	private static final int RESULT_BOX = 1;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deliver);
 		
-		findViewById(R.id.scan).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.scan_order).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Intent openCameraIntent = new Intent(DeliverActivity.this, CaptureActivity.class);  
-                startActivityForResult(openCameraIntent, 0);
+                startActivityForResult(openCameraIntent, RESULT_ORDER);
 			}
 		});
 		
+		findViewById(R.id.scan_box).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent openCameraIntent = new Intent(DeliverActivity.this, CaptureActivity.class);  
+                startActivityForResult(openCameraIntent, RESULT_BOX);
+			}
+		});
+
 		findViewById(R.id.exit).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -58,12 +70,21 @@ public class DeliverActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && data != null) {
-			TextView result = (TextView) findViewById(R.id.result);
-			mResultContainerNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
-			result.setText(mResultContainerNo);
-			
-			result.setVisibility(View.VISIBLE);
-			findViewById(R.id.tip).setVisibility(View.VISIBLE);
+			if (requestCode == RESULT_ORDER) {
+				TextView result = (TextView) findViewById(R.id.result_order);
+				mResultDeliveryNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
+				result.setText(mResultDeliveryNo);
+				
+				result.setVisibility(View.VISIBLE);
+				findViewById(R.id.tip_order).setVisibility(View.VISIBLE);
+			} else if (requestCode == RESULT_BOX) {
+				TextView result = (TextView) findViewById(R.id.result_box);
+				mResultContainerNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
+				result.setText(mResultContainerNo);
+				
+				result.setVisibility(View.VISIBLE);
+				findViewById(R.id.tip_box).setVisibility(View.VISIBLE);
+			}
 		}
 	}
 	

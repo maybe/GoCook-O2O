@@ -51,4 +51,16 @@ public class BizModel {
 			return Flag.getFlagString(responseData.getFlag());
 		}
 	}
+	
+	public static String timeOut(String staffId, String containerNo) {
+		DeliveryOpenTimeOutBoxInfo timeOutBoxInfo = new DeliveryOpenTimeOutBoxInfo(staffId, containerNo);
+		RequestData requestData = new RequestData(Cmd.OVERTIME, timeOutBoxInfo);
+		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
+		ResponseData responseData = new ResponseData(result);
+		if (responseData.getFlag() == 1) { // success
+			return "";
+		} else {
+			return Flag.getFlagString(responseData.getFlag());
+		}
+	}
 }

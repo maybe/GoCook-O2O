@@ -47,9 +47,9 @@ public class DeliveryOpenBoxInfo extends BaseData {
 	public String getJsonData() {
 		try {
 			JSONObject postJsonObject = new JSONObject();
-			postJsonObject.put("staffid", staffId);
-			postJsonObject.put("containerno", containerNo);
-			postJsonObject.put("deliveryno", deliveryNo);
+			postJsonObject.put("StaffId", staffId);
+			postJsonObject.put("ContainerNo", containerNo);
+			postJsonObject.put("DeliveryNo", deliveryNo);
 			return postJsonObject.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -19,9 +19,12 @@
     <string name="cancel">取消</string>
     <string name="exit">返回</string>
     
-    <string name="deliver_result">扫描结果：</string>
+    <string name="tip_order">配送单号：</string>
+    <string name="tip_box">配送柜号：</string>
     <string name="deliver_error_tip">错误信息：</string>
-    <string name="scan">配送扫描</string>
+    <string name="scan_order">配送单扫描</string>
+    <string name="scan_box">配送柜扫描</string>
     <string name="unpacking">开箱</string>
+    <string name="timeout">超时开箱</string>
     
 </resources>

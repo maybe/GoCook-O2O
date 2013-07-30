@@ -55,16 +55,16 @@ public class MainActivity extends Activity {
 	
 	private void logout() {
 		new AlertDialog.Builder(this)
-        .setTitle(R.string.biz_main_exit_title)
-        .setMessage(R.string.biz_main_exit_message)
-        .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-            	BizModel.clearStaffId(MainActivity.this);
-            	MainActivity.this.finish();
-            }
-        })
-        .setNegativeButton(R.string.cancel, null)
-        .create()
-        .show();
+	        .setTitle(R.string.biz_main_exit_title)
+	        .setMessage(R.string.biz_main_exit_message)
+	        .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int whichButton) {
+	            	BizModel.clearStaffId(MainActivity.this);
+	            	MainActivity.this.finish();
+	            }
+	        })
+	        .setNegativeButton(R.string.cancel, null)
+	        .create()
+	        .show();
 	}
 }

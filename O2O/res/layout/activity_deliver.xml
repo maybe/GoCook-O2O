@@ -2,64 +2,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context=".DeliverActivity" >
 
     <Button
-        android:id="@+id/scan"
-        android:text="@string/scan"
-        android:layout_marginTop="30dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-    
-    <TextView
-        android:id="@+id/tip"
-        android:layout_marginTop="10dp"
+        android:id="@+id/scan_order"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:visibility="gone"
-        android:text="@string/deliver_result" />
+        android:layout_marginTop="30dp"
+        android:text="@string/scan_order" />
 
     <TextView
-        android:id="@+id/result"
+        android:id="@+id/tip_order"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/tip_order"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/result_order"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="26sp"
-        android:visibility="gone"
-        android:gravity="center" />
-    
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/scan_box"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/scan_box" />
+
+    <TextView
+        android:id="@+id/tip_box"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/tip_box"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/result_box"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="26sp"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/unpacking"
-        android:layout_marginTop="20dp"
-        android:text="@string/unpacking"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-    
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/unpacking" />
+
     <TextView
         android:id="@+id/tip_error"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/deliver_error_tip"
         android:textSize="16sp"
-        android:visibility="gone"
-        android:text="@string/deliver_error_tip" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/error"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="26sp"
-        android:visibility="gone"
-        android:gravity="center" />
-    
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/exit"
-        android:text="@string/exit"
-        android:layout_marginTop="20dp"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/exit" />
+
 </LinearLayout>

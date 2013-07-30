@@ -37,8 +37,8 @@ public class DeliveryOpenTimeOutBoxInfo extends BaseData {
 	public String getJsonData() {
 		try {
 			JSONObject postJsonObject = new JSONObject();
-			postJsonObject.put("staffid", staffId);
-			postJsonObject.put("containerno", containerNo);
+			postJsonObject.put("StaffId", staffId);
+			postJsonObject.put("ContainerNo", containerNo);
 			return postJsonObject.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();

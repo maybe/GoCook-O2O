@@ -37,8 +37,8 @@ public class CLoginInfo extends BaseData {
 	public String getJsonData() {
 		try {
 			JSONObject postJsonObject = new JSONObject();
-			postJsonObject.put("account", account);
-			postJsonObject.put("password", password);
+			postJsonObject.put("Account", account);
+			postJsonObject.put("Password", password);
 			return postJsonObject.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
