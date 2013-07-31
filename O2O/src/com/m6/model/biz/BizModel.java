@@ -40,6 +40,18 @@ public class BizModel {
 		editor.commit();
 	}
 	
+	public static String login(String account, String password) {
+		CLoginInfo cLoginInfo = new CLoginInfo(account, password);
+		RequestData requestData = new RequestData(Cmd.AUTHEN, cLoginInfo);
+		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
+		ResponseData responseData = new ResponseData(result);
+		if (responseData.getFlag() == 1) { // success
+			return "";
+		} else {
+			return Flag.getFlagString(responseData.getFlag());
+		}
+	}
+	
 	public static String openBox(String staffId, String containerNo, String deliveryNo) {
 		DeliveryOpenBoxInfo openBoxInfo = new DeliveryOpenBoxInfo(staffId, containerNo, deliveryNo);
 		RequestData requestData = new RequestData(Cmd.UNPACKING, openBoxInfo);

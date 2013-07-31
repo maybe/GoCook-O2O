@@ -54,9 +54,9 @@ public class RequestData {
 	public String getPostData() {
 		try {
 			JSONObject postData = new JSONObject();
-			postData.put("cmd", cmd);
-			postData.put("data", data);
-			postData.put("md5", md5);
+			postData.put("Cmd", cmd);
+			postData.put("Data", data);
+			postData.put("Md5", md5);
 			return postData.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();

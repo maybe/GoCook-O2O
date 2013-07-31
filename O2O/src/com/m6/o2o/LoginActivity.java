@@ -2,6 +2,7 @@ package com.m6.o2o;
 
 import com.m6.model.base.Cmd;
 import com.m6.model.base.RequestData;
+import com.m6.model.biz.BizModel;
 import com.m6.model.biz.CLoginInfo;
 import com.m6.util.NetUtils;
 
@@ -81,9 +82,7 @@ public class LoginActivity extends Activity {
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-//						attemptLogin();
-						startActivity(new Intent(LoginActivity.this, MainActivity.class));
-						LoginActivity.this.finish();
+						attemptLogin();
 					}
 				});
 	}
@@ -185,32 +184,36 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
+	
+	private void bindData(String resultInfo) {
+		if (!TextUtils.isEmpty(resultInfo)) {
+			TextView error = (TextView) findViewById(R.id.error);
+			error.setText(resultInfo);
+			
+			error.setVisibility(View.VISIBLE);
+			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
+		} else {
+			startActivity(new Intent(LoginActivity.this, MainActivity.class));
+			LoginActivity.this.finish();
+		}
+	}
 
 	/**
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	public class UserLoginTask extends AsyncTask<Void, Void, String> {
+		
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			CLoginInfo cLoginInfo = new CLoginInfo(mEmail, mPassword);
-			RequestData requestData = new RequestData(Cmd.AUTHEN, cLoginInfo);
-			NetUtils.httpPost("", requestData.getPostData());
-			return true;
+		protected String doInBackground(Void... params) {
+			return BizModel.login(mEmail, mPassword);
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
+		protected void onPostExecute(String resultInfo) {
 			mAuthTask = null;
 			showProgress(false);
-
-			if (success) {
-				finish();
-			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
-			}
+			bindData(resultInfo);
 		}
 
 		@Override
