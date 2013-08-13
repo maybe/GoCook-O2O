@@ -3,6 +3,7 @@ package com.m6.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -104,11 +105,22 @@ public class SecurityUtils {
 		if (TextUtils.isEmpty(text)) {
 			return null;
 		}
-
+		char hexDigits[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 		try {
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(text.getBytes());
-			return Base64.encodeToString(md5.digest(), Base64.DEFAULT);
+			// 获得密文
+            byte[] md = md5.digest();
+            // 把密文转换成十六进制的字符串形式
+            int j = md.length;
+            char str[] = new char[j * 2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                str[k++] = hexDigits[byte0 & 0xf];
+            }
+			return new String(str).toLowerCase(Locale.US);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

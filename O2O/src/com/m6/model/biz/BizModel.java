@@ -18,7 +18,8 @@ public class BizModel {
 	
 	public static final String ACTIVITY_RESULT = "result_barcode";
 	
-	private static final String REQUEST_URL = "http://nbjidi.vicp.net/m6o2o/ws/app.ashx";
+//	private static final String REQUEST_URL = "http://nbjidi.vicp.net/m6o2o/ws/app.ashx";
+	private static final String REQUEST_URL = "http://o.m6fresh.com/ws/app.ashx";
 
 	
 	public static String getStaffId(Context context) {
@@ -42,7 +43,7 @@ public class BizModel {
 	
 	public static String login(String account, String password) {
 		CLoginInfo cLoginInfo = new CLoginInfo(account, password);
-		RequestData requestData = new RequestData(Cmd.AUTHEN, cLoginInfo);
+		RequestData requestData = new RequestData(Cmd.DISPATCHER_AUTHEN, cLoginInfo);
 		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
 		if (responseData.getFlag() == 1) { // success
