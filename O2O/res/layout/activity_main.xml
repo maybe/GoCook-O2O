@@ -43,13 +43,13 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
-            <Button
+            <!-- <Button
                 android:id="@+id/log"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/activity_main_button_height"
                 android:textSize="@dimen/activity_main_button_textsize"
                 android:layout_weight="1"
-                android:text="@string/log" />
+                android:text="@string/log" /> -->
 
             <Button
                 android:id="@+id/logout"

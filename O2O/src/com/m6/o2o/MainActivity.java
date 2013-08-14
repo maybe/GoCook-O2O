@@ -36,13 +36,13 @@ public class MainActivity extends Activity {
 					}
 				});
 		
-		findViewById(R.id.log).setOnClickListener(new OnClickListener() {
+		/*findViewById(R.id.log).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(MainActivity.this, LogActivity.class));
 			}
-		});
+		});*/
 		
 		findViewById(R.id.logout).setOnClickListener(new OnClickListener() {
 			

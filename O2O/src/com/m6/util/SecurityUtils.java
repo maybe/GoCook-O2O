@@ -111,15 +111,15 @@ public class SecurityUtils {
 			// 获得密文
             byte[] md = md5.digest();
             // 把密文转换成十六进制的字符串形式
-            int j = md.length;
-            char str[] = new char[j * 2];
-            int k = 0;
-            for (int i = 0; i < j; i++) {
-                byte byte0 = md[i];
-                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-                str[k++] = hexDigits[byte0 & 0xf];
-            }
-			return new String(str).toLowerCase(Locale.US);
+//            int j = md.length;
+//            char str[] = new char[j * 2];
+//            int k = 0;
+//            for (int i = 0; i < j; i++) {
+//                byte byte0 = md[i];
+//                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+//                str[k++] = hexDigits[byte0 & 0xf];
+//            }
+			return Base64.encodeToString(md, Base64.DEFAULT);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}

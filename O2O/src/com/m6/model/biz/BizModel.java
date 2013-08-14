@@ -18,8 +18,7 @@ public class BizModel {
 	
 	public static final String ACTIVITY_RESULT = "result_barcode";
 	
-//	private static final String REQUEST_URL = "http://nbjidi.vicp.net/m6o2o/ws/app.ashx";
-	private static final String REQUEST_URL = "http://o.m6fresh.com/ws/app.ashx";
+	private static final String REQUEST_URL = "http://o.m6fresh.com/m6o2o/ws/app.ashx";
 
 	
 	public static String getStaffId(Context context) {
