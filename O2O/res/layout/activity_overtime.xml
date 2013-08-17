@@ -33,6 +33,13 @@
         android:textSize="26sp"
         android:visibility="gone" />
 
+    <EditText
+        android:id="@+id/input_no"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="配送柜号"
+        android:gravity="center" />
+    
     <Button
         android:id="@+id/timeout"
         android:layout_width="fill_parent"
@@ -54,7 +61,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="26sp"
+        android:textSize="14sp"
         android:visibility="gone" />
 
     <Button

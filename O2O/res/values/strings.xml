@@ -27,4 +27,7 @@
     <string name="unpacking">开箱</string>
     <string name="timeout">超时开箱</string>
     
+    <string name="openbox_success">配送开箱成功</string>
+    <string name="overtime_openbox_success">超时取回开箱成功</string>
+    
 </resources>

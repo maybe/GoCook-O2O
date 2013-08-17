@@ -1,5 +1,8 @@
 package com.m6.model.base;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,10 +12,6 @@ import com.m6.util.SecurityUtils;
 public class RequestData {
 
 	private static final int AppId = 1;
-	
-	private static final String AppKey = "DAB578EC-6C01-4180-939A-37E6BE8A81AF";
-	
-	private static final String AppIV = "117A5C0F-7036-476f-B789-01BBA998D0CF";
 	
 	private int cmd;
 	
@@ -24,7 +23,10 @@ public class RequestData {
 	public RequestData(int cmd, BaseData data) {
 		this.cmd = cmd;
 		this.data = data.getJsonData();
-		this.md5 = SecurityUtils.MD5Encry(AppKey + this.cmd + AppId + this.data + AppIV);
+		this.md5 = SecurityUtils.MD5Encry(SecurityUtils.PASSWORD_CRYPT_KEY + this.cmd + AppId + this.data + SecurityUtils.PASSWORD_CRYPT_IV);
+		Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+        Matcher m = p.matcher(this.md5);
+        this.md5 = m.replaceAll("");
 	}
 
 	public int getCmd() {

@@ -18,7 +18,8 @@ public class BizModel {
 	
 	public static final String ACTIVITY_RESULT = "result_barcode";
 	
-	private static final String REQUEST_URL = "http://o.m6fresh.com/m6o2o/ws/app.ashx";
+//	private static final String REQUEST_URL = "http://o.m6fresh.com/m6o2o/ws/app.ashx";
+	private static final String REQUEST_URL = "http://o.m6fresh.com/ws/app.ashx";
 
 	
 	public static String getStaffId(Context context) {
@@ -40,39 +41,27 @@ public class BizModel {
 		editor.commit();
 	}
 	
-	public static String login(String account, String password) {
+	public static ResponseData login(String account, String password) {
 		CLoginInfo cLoginInfo = new CLoginInfo(account, password);
 		RequestData requestData = new RequestData(Cmd.DISPATCHER_AUTHEN, cLoginInfo);
 		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
-		if (responseData.getFlag() == 1) { // success
-			return "";
-		} else {
-			return Flag.getFlagString(responseData.getFlag());
-		}
+		return responseData;
 	}
 	
-	public static String openBox(String staffId, String containerNo, String deliveryNo) {
+	public static ResponseData openBox(String staffId, String containerNo, String deliveryNo) {
 		DeliveryOpenBoxInfo openBoxInfo = new DeliveryOpenBoxInfo(staffId, containerNo, deliveryNo);
 		RequestData requestData = new RequestData(Cmd.UNPACKING, openBoxInfo);
 		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
-		if (responseData.getFlag() == 1) { // success
-			return "";
-		} else {
-			return Flag.getFlagString(responseData.getFlag());
-		}
+		return responseData;
 	}
 	
-	public static String timeOut(String staffId, String containerNo) {
+	public static ResponseData timeOut(String staffId, String containerNo) {
 		DeliveryOpenTimeOutBoxInfo timeOutBoxInfo = new DeliveryOpenTimeOutBoxInfo(staffId, containerNo);
 		RequestData requestData = new RequestData(Cmd.OVERTIME, timeOutBoxInfo);
 		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
-		if (responseData.getFlag() == 1) { // success
-			return "";
-		} else {
-			return Flag.getFlagString(responseData.getFlag());
-		}
+		return responseData;
 	}
 }

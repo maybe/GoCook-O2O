@@ -19,6 +19,12 @@ public class MainActivity extends Activity {
 		setOnListeners();
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		BizModel.clearStaffId(MainActivity.this);
+	}
+	
 	private void setOnListeners() {
 		findViewById(R.id.deliver).setOnClickListener(new OnClickListener() {
 			
@@ -59,7 +65,6 @@ public class MainActivity extends Activity {
 	        .setMessage(R.string.biz_main_exit_message)
 	        .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int whichButton) {
-	            	BizModel.clearStaffId(MainActivity.this);
 	            	MainActivity.this.finish();
 	            }
 	        })

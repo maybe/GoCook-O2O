@@ -3,7 +3,6 @@ package com.m6.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -17,9 +16,10 @@ public class SecurityUtils {
 
 	// 定义加密算法，有DES、DESede(即3DES)、Blowfish
 	private static final String Algorithm = "DESede/CBC/PKCS5Padding";
-	private static final String PASSWORD_CRYPT_KEY = "DAB578EC-6C01-4180-939A-37E6BE8A81AF";
-	private static final String PASSWORD_CRYPT_IV = "117A5C0F-7036-476f-B789-01BBA998D0CF";
+	public static final String PASSWORD_CRYPT_KEY = "DAB578EC-6C01-4180-939A-37E6BE8A81AF";
+	public static final String PASSWORD_CRYPT_IV = "117A5C0F";
 
+	
 	/**
 	 * 加密方法
 	 * 
@@ -29,20 +29,47 @@ public class SecurityUtils {
 	 */
 	public static String encryptMode(byte[] src) {
 		try {
-//			SecretKey deskey = new SecretKeySpec(build3DesKey(PASSWORD_CRYPT_KEY), Algorithm); // 生成密钥
-			DESedeKeySpec dks = new DESedeKeySpec(PASSWORD_CRYPT_KEY.getBytes());
+			byte[] bkey = getMD5Encry(PASSWORD_CRYPT_KEY);
+			byte[] ebkey = new byte[24];
+			for(int i = 0; i < 24; i++) {
+				ebkey[i] = 0;
+			}
+			System.arraycopy(bkey, 0, ebkey, 0, bkey.length);
+			DESedeKeySpec dks = new DESedeKeySpec(ebkey);
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
 			SecretKey securekey = keyFactory.generateSecret(dks);
-			IvParameterSpec iv = new IvParameterSpec(PASSWORD_CRYPT_IV.getBytes());
+			
+			byte[] bIV = getMD5Encry(PASSWORD_CRYPT_IV);
+			byte[] ebIV = new byte[8];
+			for (int i = 0; i < 8; i++) {
+				ebIV[i] = (byte) Math.abs((byteToInt(bIV[i]) - byteToInt(bIV[i + 1])));
+			}
+			IvParameterSpec iv = new IvParameterSpec(ebIV);
+			
 			Cipher c1 = Cipher.getInstance(Algorithm); // 实例化负责加密/解密的Cipher工具类
 			c1.init(Cipher.ENCRYPT_MODE, securekey, iv); // 初始化为加密模式
-			return new String(c1.doFinal(src));
+			return Base64.encodeToString(c1.doFinal(src), Base64.DEFAULT);
 		} catch (java.security.NoSuchAlgorithmException e1) {
 			e1.printStackTrace();
 		} catch (javax.crypto.NoSuchPaddingException e2) {
 			e2.printStackTrace();
 		} catch (java.lang.Exception e3) {
 			e3.printStackTrace();
+		}
+		return null;
+	}
+	
+	private static int byteToInt(byte src) {
+		return src & 0XFF;
+	}
+	
+	public static byte[] getMD5Encry(String text) {
+		try {
+			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			md5.update(text.getBytes());
+			return md5.digest();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -63,7 +90,7 @@ public class SecurityUtils {
 			IvParameterSpec iv = new IvParameterSpec(PASSWORD_CRYPT_IV.getBytes());
 			Cipher c1 = Cipher.getInstance(Algorithm);
 			c1.init(Cipher.DECRYPT_MODE, securekey, iv); // 初始化为解密模式
-			return new String(c1.doFinal(src));
+			return Base64.encodeToString(c1.doFinal(src), Base64.DEFAULT);
 		} catch (java.security.NoSuchAlgorithmException e1) {
 			e1.printStackTrace();
 		} catch (javax.crypto.NoSuchPaddingException e2) {
@@ -74,7 +101,7 @@ public class SecurityUtils {
 		return null;
 	}
 
-	/*
+	/**
 	 * 根据字符串生成密钥字节数组
 	 * 
 	 * @param keyStr 密钥字符串

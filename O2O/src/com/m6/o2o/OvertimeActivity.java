@@ -6,13 +6,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
+import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
 
 public class OvertimeActivity extends Activity {
@@ -48,9 +52,15 @@ public class OvertimeActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				new TimeOutTask(OvertimeActivity.this, mResultContainerNo).execute((Void) null);
-				timeout.setClickable(false);
-				timeout.setEnabled(false);
+//				new TimeOutTask(OvertimeActivity.this, mResultContainerNo).execute((Void) null);
+				// TODO  Test
+				Editable boxNo = ((EditText) findViewById(R.id.input_no)).getText();
+				if (boxNo != null) {
+					new TimeOutTask(OvertimeActivity.this, boxNo.toString())
+					.execute((Void) null);
+					timeout.setClickable(false);
+					timeout.setEnabled(false);
+				}
 			}
 		});
 	}
@@ -69,17 +79,19 @@ public class OvertimeActivity extends Activity {
 		}
 	}
 	
-	private void bindData(String resultInfo) {
-		if (!TextUtils.isEmpty(resultInfo)) {
+	private void bindData(ResponseData responseData) {
+		if (responseData.getFlag() == 1) { // success
+			Toast.makeText(this, R.string.overtime_openbox_success, Toast.LENGTH_SHORT).show();
+		} else {
 			TextView error = (TextView) findViewById(R.id.error);
-			error.setText(resultInfo);
+			error.setText(responseData.getMsg());
 			
 			error.setVisibility(View.VISIBLE);
 			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
 		}
 	}
 	
-	private static class TimeOutTask extends AsyncTask<Void, Void, String> {
+	private static class TimeOutTask extends AsyncTask<Void, Void, ResponseData> {
 
 		private WeakReference<OvertimeActivity> mActivity;
 		private String mContainerNo;
@@ -90,12 +102,12 @@ public class OvertimeActivity extends Activity {
 		}
 		
 		@Override
-		protected String doInBackground(Void... params) {
+		protected ResponseData doInBackground(Void... params) {
 			return BizModel.timeOut(BizModel.getStaffId(mActivity.get()), mContainerNo);
 		}
 		
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(ResponseData result) {
 			if (mActivity != null) {
 				OvertimeActivity activity = mActivity.get();
 				if (activity != null) {

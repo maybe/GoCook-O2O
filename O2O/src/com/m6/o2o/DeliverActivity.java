@@ -3,17 +3,19 @@ package com.m6.o2o;
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.text.Editable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
+import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
 
 public class DeliverActivity extends Activity {
@@ -60,9 +62,18 @@ public class DeliverActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				new OpenBoxTask(DeliverActivity.this, mResultContainerNo, mResultDeliveryNo).execute((Void) null);
-				unPacking.setClickable(false);
-				unPacking.setEnabled(false);
+//				new OpenBoxTask(DeliverActivity.this, mResultContainerNo, mResultDeliveryNo).execute((Void) null);
+				// TODO  Test
+				Editable boxNo = ((EditText) findViewById(R.id.input_no_box)).getText();
+				Editable deliveryNo = ((EditText) findViewById(R.id.input_no)).getText();
+				if (boxNo != null && deliveryNo != null) {
+					new OpenBoxTask(DeliverActivity.this, 
+							boxNo.toString(), 
+							deliveryNo.toString())
+					.execute((Void) null);
+					unPacking.setClickable(false);
+					unPacking.setEnabled(false);
+				}
 			}
 		});
 	}
@@ -88,17 +99,19 @@ public class DeliverActivity extends Activity {
 		}
 	}
 	
-	private void bindData(String resultInfo) {
-		if (!TextUtils.isEmpty(resultInfo)) {
+	private void bindData(ResponseData responseData) {
+		if (responseData.getFlag() == 1) { // success
+			Toast.makeText(this, R.string.openbox_success, Toast.LENGTH_SHORT).show();
+		} else {
 			TextView error = (TextView) findViewById(R.id.error);
-			error.setText(resultInfo);
+			error.setText(responseData.getMsg());
 			
 			error.setVisibility(View.VISIBLE);
 			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
 		}
 	}
 	
-	private static class OpenBoxTask extends AsyncTask<Void, Void, String> {
+	private static class OpenBoxTask extends AsyncTask<Void, Void, ResponseData> {
 
 		private WeakReference<DeliverActivity> mActivity;
 		private String mContainerNo;
@@ -111,12 +124,12 @@ public class DeliverActivity extends Activity {
 		}
 		
 		@Override
-		protected String doInBackground(Void... params) {
+		protected ResponseData doInBackground(Void... params) {
 			return BizModel.openBox(BizModel.getStaffId(mActivity.get()), mContainerNo, mDeliveryNo);
 		}
 		
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(ResponseData result) {
 			if (mActivity != null) {
 				DeliverActivity activity = mActivity.get();
 				if (activity != null) {

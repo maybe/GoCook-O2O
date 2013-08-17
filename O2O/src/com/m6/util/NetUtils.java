@@ -14,6 +14,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,7 +231,7 @@ public class NetUtils {
 			OutputStream out = new BufferedOutputStream(
 					conn.getOutputStream());
 			List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-			params.add(new BasicNameValuePair("data", data));
+			params.add(new BasicNameValuePair("data", URLEncoder.encode(data, "UTF-8")));
 			writeStream(out, params);
 			out.flush();
 			out.close();

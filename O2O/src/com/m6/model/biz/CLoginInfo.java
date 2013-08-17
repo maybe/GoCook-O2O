@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.m6.model.base.BaseData;
+import com.m6.util.SecurityUtils;
 
 public class CLoginInfo extends BaseData {
 
@@ -38,7 +39,8 @@ public class CLoginInfo extends BaseData {
 		try {
 			JSONObject postJsonObject = new JSONObject();
 			postJsonObject.put("Account", account);
-			postJsonObject.put("Password", password);
+			String pa = SecurityUtils.encryptMode(password.getBytes());
+			postJsonObject.put("Password", pa.replace("\n", ""));
 			return postJsonObject.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();

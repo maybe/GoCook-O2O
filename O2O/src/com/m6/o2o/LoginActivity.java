@@ -2,6 +2,7 @@ package com.m6.o2o;
 
 import com.m6.model.base.Cmd;
 import com.m6.model.base.RequestData;
+import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
 import com.m6.model.biz.CLoginInfo;
 import com.m6.util.NetUtils;
@@ -185,16 +186,17 @@ public class LoginActivity extends Activity {
 		}
 	}
 	
-	private void bindData(String resultInfo) {
-		if (!TextUtils.isEmpty(resultInfo)) {
+	private void bindData(ResponseData responseData) {
+		if (responseData.getFlag() == 1) { // success
+			BizModel.saveStaffId(this, String.valueOf(responseData.getData()));
+			startActivity(new Intent(LoginActivity.this, MainActivity.class));
+			LoginActivity.this.finish();
+		} else {
 			TextView error = (TextView) findViewById(R.id.error);
-			error.setText(resultInfo);
+			error.setText(responseData.getMsg());
 			
 			error.setVisibility(View.VISIBLE);
 			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
-		} else {
-			startActivity(new Intent(LoginActivity.this, MainActivity.class));
-			LoginActivity.this.finish();
 		}
 	}
 
@@ -202,15 +204,15 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, String> {
+	public class UserLoginTask extends AsyncTask<Void, Void, ResponseData> {
 		
 		@Override
-		protected String doInBackground(Void... params) {
+		protected ResponseData doInBackground(Void... params) {
 			return BizModel.login(mEmail, mPassword);
 		}
 
 		@Override
-		protected void onPostExecute(String resultInfo) {
+		protected void onPostExecute(ResponseData resultInfo) {
 			mAuthTask = null;
 			showProgress(false);
 			bindData(resultInfo);
