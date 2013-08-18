@@ -24,7 +24,7 @@ public class SecurityUtils {
 	/**
 	 * 3DES加密。Key是24位，IV是8位。
 	 * 
-	 * @param src 源数据的字节数组
+	 * @param src 源数据的字符串
 	 * @return
 	 */
 	public static String encryptMode(String src) {
@@ -90,15 +90,15 @@ public class SecurityUtils {
 	/**
 	 * 3DES解密
 	 * 
-	 * @param src 密文的字节数组
+	 * @param src 密文的Base64字符串
 	 * @return
 	 */
 	public static String decryptMode(String src) {
 		try {
-			DESedeKeySpec dks = new DESedeKeySpec(PASSWORD_CRYPT_KEY.getBytes());
+			DESedeKeySpec dks = new DESedeKeySpec(getEncryKey(PASSWORD_CRYPT_KEY));
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
 			SecretKey securekey = keyFactory.generateSecret(dks);
-			IvParameterSpec iv = new IvParameterSpec(PASSWORD_CRYPT_IV.getBytes());
+			IvParameterSpec iv = new IvParameterSpec(getEncryIV(PASSWORD_CRYPT_IV));
 			Cipher c1 = Cipher.getInstance(Algorithm);
 			c1.init(Cipher.DECRYPT_MODE, securekey, iv); // 初始化为解密模式
 			return new String(c1.doFinal(Base64.decode(src, Base64.DEFAULT)));
