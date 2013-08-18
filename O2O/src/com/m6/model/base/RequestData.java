@@ -24,9 +24,6 @@ public class RequestData {
 		this.cmd = cmd;
 		this.data = data.getJsonData();
 		this.md5 = SecurityUtils.MD5Encry(SecurityUtils.PASSWORD_CRYPT_KEY + this.cmd + AppId + this.data + SecurityUtils.PASSWORD_CRYPT_IV);
-		Pattern p = Pattern.compile("\\s*|\t|\r|\n");
-        Matcher m = p.matcher(this.md5);
-        this.md5 = m.replaceAll("");
 	}
 
 	public int getCmd() {

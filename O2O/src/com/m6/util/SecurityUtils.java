@@ -1,8 +1,9 @@
 package com.m6.util;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -21,34 +22,20 @@ public class SecurityUtils {
 
 	
 	/**
-	 * 加密方法
+	 * 3DES加密。Key是24位，IV是8位。
 	 * 
-	 * @param src
-	 *            源数据的字节数组
+	 * @param src 源数据的字节数组
 	 * @return
 	 */
-	public static String encryptMode(byte[] src) {
+	public static String encryptMode(String src) {
 		try {
-			byte[] bkey = getMD5Encry(PASSWORD_CRYPT_KEY);
-			byte[] ebkey = new byte[24];
-			for(int i = 0; i < 24; i++) {
-				ebkey[i] = 0;
-			}
-			System.arraycopy(bkey, 0, ebkey, 0, bkey.length);
-			DESedeKeySpec dks = new DESedeKeySpec(ebkey);
+			DESedeKeySpec dks = new DESedeKeySpec(getEncryKey(PASSWORD_CRYPT_KEY));
 			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
 			SecretKey securekey = keyFactory.generateSecret(dks);
-			
-			byte[] bIV = getMD5Encry(PASSWORD_CRYPT_IV);
-			byte[] ebIV = new byte[8];
-			for (int i = 0; i < 8; i++) {
-				ebIV[i] = (byte) Math.abs((byteToInt(bIV[i]) - byteToInt(bIV[i + 1])));
-			}
-			IvParameterSpec iv = new IvParameterSpec(ebIV);
-			
+			IvParameterSpec iv = new IvParameterSpec(getEncryIV(PASSWORD_CRYPT_IV));
 			Cipher c1 = Cipher.getInstance(Algorithm); // 实例化负责加密/解密的Cipher工具类
 			c1.init(Cipher.ENCRYPT_MODE, securekey, iv); // 初始化为加密模式
-			return Base64.encodeToString(c1.doFinal(src), Base64.DEFAULT);
+			return Base64.encodeToString(c1.doFinal(src.getBytes()), Base64.DEFAULT);
 		} catch (java.security.NoSuchAlgorithmException e1) {
 			e1.printStackTrace();
 		} catch (javax.crypto.NoSuchPaddingException e2) {
@@ -59,11 +46,82 @@ public class SecurityUtils {
 		return null;
 	}
 	
+	/**
+	 * 计算24位key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private static byte[] getEncryKey(String key) {
+		byte[] bkey = getMD5EncryBytes(key);
+		byte[] ebkey = new byte[24];
+		for(int i = 0; i < 24; i++) {
+			ebkey[i] = 0;
+		}
+		System.arraycopy(bkey, 0, ebkey, 0, bkey.length);
+		return ebkey;
+	}
+	
+	/**
+	 * 计算8位IV
+	 * 
+	 * @param iv
+	 * @return
+	 */
+	private static byte[] getEncryIV(String iv) {
+		byte[] bIV = getMD5EncryBytes(iv);
+		byte[] ebIV = new byte[8];
+		for (int i = 0; i < 8; i++) {
+			ebIV[i] = (byte) Math.abs((byteToInt(bIV[i]) - byteToInt(bIV[i + 1])));
+		}
+		return ebIV;
+	}
+	
+	/**
+	 * byte转换为int。（由于C#和Java byte范围不同，C#:0~255, Java:-128~127
+	 * 在经过byte的加减运算时造成加密编码后无法正确还原，因此先把byte转换为int，计算后再转回byte）
+	 * @param src
+	 * @return
+	 */
 	private static int byteToInt(byte src) {
 		return src & 0XFF;
 	}
 	
-	public static byte[] getMD5Encry(String text) {
+	/**
+	 * 3DES解密
+	 * 
+	 * @param src 密文的字节数组
+	 * @return
+	 */
+	public static String decryptMode(String src) {
+		try {
+			DESedeKeySpec dks = new DESedeKeySpec(PASSWORD_CRYPT_KEY.getBytes());
+			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
+			SecretKey securekey = keyFactory.generateSecret(dks);
+			IvParameterSpec iv = new IvParameterSpec(PASSWORD_CRYPT_IV.getBytes());
+			Cipher c1 = Cipher.getInstance(Algorithm);
+			c1.init(Cipher.DECRYPT_MODE, securekey, iv); // 初始化为解密模式
+			return new String(c1.doFinal(Base64.decode(src, Base64.DEFAULT)));
+		} catch (java.security.NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		} catch (javax.crypto.NoSuchPaddingException e2) {
+			e2.printStackTrace();
+		} catch (java.lang.Exception e3) {
+			e3.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 获取MD5计算后的byte数组
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static byte[] getMD5EncryBytes(String text) {
+		if (TextUtils.isEmpty(text)) {
+			return null;
+		}
 		try {
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			md5.update(text.getBytes());
@@ -73,84 +131,28 @@ public class SecurityUtils {
 		}
 		return null;
 	}
-
+	
 	/**
-	 * 解密函数
+	 * MD5加密
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String MD5Encry(String text) {
+		byte[] md = getMD5EncryBytes(text);
+		return trimLineFeed(Base64.encodeToString(md, Base64.DEFAULT));
+	}
+	
+	/**
+	 * 去除换行符
 	 * 
 	 * @param src
-	 *            密文的字节数组
 	 * @return
 	 */
-	public static String decryptMode(byte[] src) {
-		try {
-//			SecretKey deskey = new SecretKeySpec(build3DesKey(PASSWORD_CRYPT_KEY), Algorithm);
-			DESedeKeySpec dks = new DESedeKeySpec(PASSWORD_CRYPT_KEY.getBytes());
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DESede");
-			SecretKey securekey = keyFactory.generateSecret(dks);
-			IvParameterSpec iv = new IvParameterSpec(PASSWORD_CRYPT_IV.getBytes());
-			Cipher c1 = Cipher.getInstance(Algorithm);
-			c1.init(Cipher.DECRYPT_MODE, securekey, iv); // 初始化为解密模式
-			return Base64.encodeToString(c1.doFinal(src), Base64.DEFAULT);
-		} catch (java.security.NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
-		} catch (javax.crypto.NoSuchPaddingException e2) {
-			e2.printStackTrace();
-		} catch (java.lang.Exception e3) {
-			e3.printStackTrace();
-		}
-		return null;
-	}
-
-	/**
-	 * 根据字符串生成密钥字节数组
-	 * 
-	 * @param keyStr 密钥字符串
-	 * 
-	 * @return
-	 * 
-	 * @throws UnsupportedEncodingException
-	 */
-	public static byte[] build3DesKey(String keyStr) throws UnsupportedEncodingException {
-		byte[] key = new byte[24]; // 声明一个24位的字节数组，默认里面都是0
-		byte[] temp = keyStr.getBytes("UTF-8"); // 将字符串转成字节数组
-
-		/*
-		 * 执行数组拷贝 System.arraycopy(源数组，从源数组哪里开始拷贝，目标数组，拷贝多少位)
-		 */
-		if (key.length > temp.length) {
-			// 如果temp不够24位，则拷贝temp数组整个长度的内容到key数组中
-			System.arraycopy(temp, 0, key, 0, temp.length);
-		} else {
-			// 如果temp大于24位，则拷贝temp数组24个长度的内容到key数组中
-			System.arraycopy(temp, 0, key, 0, key.length);
-		}
-		return key;
-	}
-
-	public static String MD5Encry(String text) {
-		if (TextUtils.isEmpty(text)) {
-			return null;
-		}
-//		char hexDigits[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-		try {
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
-			md5.update(text.getBytes());
-			// 获得密文
-            byte[] md = md5.digest();
-            // 把密文转换成十六进制的字符串形式
-//            int j = md.length;
-//            char str[] = new char[j * 2];
-//            int k = 0;
-//            for (int i = 0; i < j; i++) {
-//                byte byte0 = md[i];
-//                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
-//                str[k++] = hexDigits[byte0 & 0xf];
-//            }
-			return Base64.encodeToString(md, Base64.DEFAULT);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public static String trimLineFeed(String src) {
+		Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+        Matcher m = p.matcher(src);
+        return m.replaceAll("");
 	}
 
 }

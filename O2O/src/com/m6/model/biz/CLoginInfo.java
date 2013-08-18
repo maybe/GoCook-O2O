@@ -39,8 +39,7 @@ public class CLoginInfo extends BaseData {
 		try {
 			JSONObject postJsonObject = new JSONObject();
 			postJsonObject.put("Account", account);
-			String pa = SecurityUtils.encryptMode(password.getBytes());
-			postJsonObject.put("Password", pa.replace("\n", ""));
+			postJsonObject.put("Password", SecurityUtils.trimLineFeed(SecurityUtils.encryptMode(password)));
 			return postJsonObject.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
