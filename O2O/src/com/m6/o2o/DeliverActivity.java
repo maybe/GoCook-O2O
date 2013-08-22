@@ -26,6 +26,8 @@ public class DeliverActivity extends Activity {
 	private static final int RESULT_ORDER = 0;
 	private static final int RESULT_BOX = 1;
 	
+	private OpenBoxTask mOpenBoxTask;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,12 +69,12 @@ public class DeliverActivity extends Activity {
 				Editable boxNo = ((EditText) findViewById(R.id.input_no_box)).getText();
 				Editable deliveryNo = ((EditText) findViewById(R.id.input_no)).getText();
 				if (boxNo != null && deliveryNo != null) {
-					new OpenBoxTask(DeliverActivity.this, 
-							boxNo.toString(), 
-							deliveryNo.toString())
-					.execute((Void) null);
-					unPacking.setClickable(false);
-					unPacking.setEnabled(false);
+					if (mOpenBoxTask == null) {
+						mOpenBoxTask = new OpenBoxTask(DeliverActivity.this, 
+								boxNo.toString(), 
+								deliveryNo.toString());
+						mOpenBoxTask.execute((Void) null);
+					}
 				}
 			}
 		});
@@ -100,6 +102,7 @@ public class DeliverActivity extends Activity {
 	}
 	
 	private void bindData(ResponseData responseData) {
+		mOpenBoxTask = null;
 		if (responseData.getFlag() == 1) { // success
 			Toast.makeText(this, R.string.openbox_success, Toast.LENGTH_SHORT).show();
 		} else {
@@ -109,6 +112,10 @@ public class DeliverActivity extends Activity {
 			error.setVisibility(View.VISIBLE);
 			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
 		}
+	}
+	
+	private void onCancel() {
+		mOpenBoxTask = null;
 	}
 	
 	private static class OpenBoxTask extends AsyncTask<Void, Void, ResponseData> {
@@ -134,6 +141,17 @@ public class DeliverActivity extends Activity {
 				DeliverActivity activity = mActivity.get();
 				if (activity != null) {
 					activity.bindData(result);
+				}
+			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			if (mActivity != null) {
+				DeliverActivity activity = mActivity.get();
+				if (activity != null) {
+					activity.onCancel();
 				}
 			}
 		}
