@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,6 +23,8 @@ public class OvertimeActivity extends Activity {
 	private String mResultContainerNo;
 	
 	private static final int RESULT_BOX = 1;
+	
+	private TimeOutTask mTimeOutTask;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +57,10 @@ public class OvertimeActivity extends Activity {
 				// TODO  Test
 				Editable boxNo = ((EditText) findViewById(R.id.input_no)).getText();
 				if (boxNo != null) {
-					new TimeOutTask(OvertimeActivity.this, boxNo.toString())
-					.execute((Void) null);
-					timeout.setClickable(false);
-					timeout.setEnabled(false);
+					if (mTimeOutTask == null) {
+						mTimeOutTask = new TimeOutTask(OvertimeActivity.this, boxNo.toString());
+						mTimeOutTask.execute((Void) null);
+					}
 				}
 			}
 		});
@@ -80,6 +81,7 @@ public class OvertimeActivity extends Activity {
 	}
 	
 	private void bindData(ResponseData responseData) {
+		mTimeOutTask = null;
 		if (responseData.getFlag() == 1) { // success
 			Toast.makeText(this, R.string.overtime_openbox_success, Toast.LENGTH_SHORT).show();
 		} else {
@@ -89,6 +91,10 @@ public class OvertimeActivity extends Activity {
 			error.setVisibility(View.VISIBLE);
 			findViewById(R.id.tip_error).setVisibility(View.VISIBLE);
 		}
+	}
+	
+	private void onCancel() {
+		mTimeOutTask = null;
 	}
 	
 	private static class TimeOutTask extends AsyncTask<Void, Void, ResponseData> {
@@ -112,6 +118,17 @@ public class OvertimeActivity extends Activity {
 				OvertimeActivity activity = mActivity.get();
 				if (activity != null) {
 					activity.bindData(result);
+				}
+			}
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			if (mActivity != null) {
+				OvertimeActivity activity = mActivity.get();
+				if (activity != null) {
+					activity.onCancel();
 				}
 			}
 		}
