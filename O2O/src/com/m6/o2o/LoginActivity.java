@@ -1,12 +1,5 @@
 package com.m6.o2o;
 
-import com.m6.model.base.Cmd;
-import com.m6.model.base.RequestData;
-import com.m6.model.base.ResponseData;
-import com.m6.model.biz.BizModel;
-import com.m6.model.biz.CLoginInfo;
-import com.m6.util.NetUtils;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -17,11 +10,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.m6.model.base.ResponseData;
+import com.m6.model.biz.BizModel;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -55,6 +50,7 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
+		setTitle(R.string.activity_title_login);
 
 		// Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);

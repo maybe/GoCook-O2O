@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">O2O配送客户端</string>
+    <string name="version">版本号：Alpha 1.4</string>
+    <string name="app_name">O2O配送</string>
+    
     <string name="action_settings">Settings</string>
     <string name="delivery_scan">配送扫描</string>
     <string name="overtime_scan">超时扫描</string>
@@ -37,6 +39,8 @@
     
     <string name="activity_title_open_box">开箱</string>
     <string name="activity_title_overtime_open_box">超时开箱</string>
+    <string name="activity_title_login">登录</string>
+    <string name="activity_title_main">O2O配送客户端</string>
     
     <string name="toast_deliveryno_empty">请扫描或输入配送单号</string>
     <string name="toast_boxno_empty">请扫描或输入配送柜号</string>
