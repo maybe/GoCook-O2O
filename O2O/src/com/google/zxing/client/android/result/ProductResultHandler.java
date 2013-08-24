@@ -50,46 +50,46 @@ public final class ProductResultHandler extends ResultHandler {
 //    });
   }
 
-  @Override
-  public int getButtonCount() {
-//    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
-	  return 3;
-  }
+//  @Override
+//  public int getButtonCount() {
+////    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
+//	  return 3;
+//  }
 
-  @Override
-  public int getButtonText(int index) {
-    return buttons[index];
-  }
+//  @Override
+//  public int getButtonText(int index) {
+//    return buttons[index];
+//  }
 
-  @Override
-  public void handleButtonPress(int index) {
-    ParsedResult rawResult = getResult();
-    String productID;
-    if (rawResult instanceof ProductParsedResult) {
-      productID = ((ProductParsedResult) rawResult).getNormalizedProductID();
-    } else if (rawResult instanceof ExpandedProductParsedResult) {
-      productID = ((ExpandedProductParsedResult) rawResult).getRawText();
-    } else {
-      throw new IllegalArgumentException(rawResult.getClass().toString());
-    }
-    switch (index) {
-      case 0:
-//        openProductSearch(productID);
-    	Intent intent = new Intent();
-    	intent.putExtra(BizModel.ACTIVITY_RESULT, getDisplayContents());
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
-        break;
-      case 1:
-//        webSearch(productID);
-    	  ((CaptureActivity) getActivity()).restartPreviewAfterDelay(0L);
-        break;
-      case 2:
-//        openURL(fillInCustomSearchURL(productID));
-        getActivity().finish();
-        break;
-    }
-  }
+//  @Override
+//  public void handleButtonPress(int index) {
+//    ParsedResult rawResult = getResult();
+//    String productID;
+//    if (rawResult instanceof ProductParsedResult) {
+//      productID = ((ProductParsedResult) rawResult).getNormalizedProductID();
+//    } else if (rawResult instanceof ExpandedProductParsedResult) {
+//      productID = ((ExpandedProductParsedResult) rawResult).getRawText();
+//    } else {
+//      throw new IllegalArgumentException(rawResult.getClass().toString());
+//    }
+//    switch (index) {
+//      case 0:
+////        openProductSearch(productID);
+//    	Intent intent = new Intent();
+//    	intent.putExtra(BizModel.ACTIVITY_RESULT, getDisplayContents());
+//        getActivity().setResult(Activity.RESULT_OK, intent);
+//        getActivity().finish();
+//        break;
+//      case 1:
+////        webSearch(productID);
+//    	  ((CaptureActivity) getActivity()).restartPreviewAfterDelay(0L);
+//        break;
+//      case 2:
+////        openURL(fillInCustomSearchURL(productID));
+//        getActivity().finish();
+//        break;
+//    }
+//  }
 
   @Override
   public int getDisplayTitle() {

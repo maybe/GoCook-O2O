@@ -48,34 +48,34 @@ public final class ISBNResultHandler extends ResultHandler {
     });
   }
 
-  @Override
-  public int getButtonCount() {
-    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
-  }
-
-  @Override
-  public int getButtonText(int index) {
-    return buttons[index];
-  }
-
-  @Override
-  public void handleButtonPress(int index) {
-    ISBNParsedResult isbnResult = (ISBNParsedResult) getResult();
-    switch (index) {
-      case 0:
-        openProductSearch(isbnResult.getISBN());
-        break;
-      case 1:
-        openBookSearch(isbnResult.getISBN());
-        break;
-      case 2:
-        searchBookContents(isbnResult.getISBN());
-        break;
-      case 3:
-        openURL(fillInCustomSearchURL(isbnResult.getISBN()));
-        break;
-    }
-  }
+//  @Override
+//  public int getButtonCount() {
+//    return hasCustomProductSearch() ? buttons.length : buttons.length - 1;
+//  }
+//
+//  @Override
+//  public int getButtonText(int index) {
+//    return buttons[index];
+//  }
+//
+//  @Override
+//  public void handleButtonPress(int index) {
+//    ISBNParsedResult isbnResult = (ISBNParsedResult) getResult();
+//    switch (index) {
+//      case 0:
+//        openProductSearch(isbnResult.getISBN());
+//        break;
+//      case 1:
+//        openBookSearch(isbnResult.getISBN());
+//        break;
+//      case 2:
+//        searchBookContents(isbnResult.getISBN());
+//        break;
+//      case 3:
+//        openURL(fillInCustomSearchURL(isbnResult.getISBN()));
+//        break;
+//    }
+//  }
 
   @Override
   public int getDisplayTitle() {

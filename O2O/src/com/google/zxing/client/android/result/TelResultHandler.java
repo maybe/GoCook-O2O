@@ -38,34 +38,34 @@ public final class TelResultHandler extends ResultHandler {
     super(activity, result);
   }
 
-  @Override
-  public int getButtonCount() {
-    return buttons.length;
-  }
-
-  @Override
-  public int getButtonText(int index) {
-    return buttons[index];
-  }
-
-  @Override
-  public void handleButtonPress(int index) {
-    TelParsedResult telResult = (TelParsedResult) getResult();
-    switch (index) {
-      case 0:
-        dialPhoneFromUri(telResult.getTelURI());
-        // When dialer comes up, it allows underlying display activity to continue or something,
-        // but app can't get camera in this state. Avoid issues by just quitting, only in the
-        // case of a phone number
-        getActivity().finish();
-        break;
-      case 1:
-        String[] numbers = new String[1];
-        numbers[0] = telResult.getNumber();
-        addPhoneOnlyContact(numbers, null);
-        break;
-    }
-  }
+//  @Override
+//  public int getButtonCount() {
+//    return buttons.length;
+//  }
+//
+//  @Override
+//  public int getButtonText(int index) {
+//    return buttons[index];
+//  }
+//
+//  @Override
+//  public void handleButtonPress(int index) {
+//    TelParsedResult telResult = (TelParsedResult) getResult();
+//    switch (index) {
+//      case 0:
+//        dialPhoneFromUri(telResult.getTelURI());
+//        // When dialer comes up, it allows underlying display activity to continue or something,
+//        // but app can't get camera in this state. Avoid issues by just quitting, only in the
+//        // case of a phone number
+//        getActivity().finish();
+//        break;
+//      case 1:
+//        String[] numbers = new String[1];
+//        numbers[0] = telResult.getNumber();
+//        addPhoneOnlyContact(numbers, null);
+//        break;
+//    }
+//  }
 
   // Overriden so we can take advantage of Android's phone number hyphenation routines.
   @Override

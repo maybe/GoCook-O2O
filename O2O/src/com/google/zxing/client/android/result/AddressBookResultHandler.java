@@ -102,58 +102,58 @@ public final class AddressBookResultHandler extends ResultHandler {
     }
   }
 
-  @Override
-  public int getButtonCount() {
-    return buttonCount;
-  }
-
-  @Override
-  public int getButtonText(int index) {
-    return BUTTON_TEXTS[mapIndexToAction(index)];
-  }
-
-  @Override
-  public void handleButtonPress(int index) {
-    AddressBookParsedResult addressResult = (AddressBookParsedResult) getResult();
-    String[] addresses = addressResult.getAddresses();
-    String address1 = addresses == null || addresses.length < 1 ? null : addresses[0];
-    String[] addressTypes = addressResult.getAddressTypes();
-    String address1Type = addressTypes == null || addressTypes.length < 1 ? null : addressTypes[0];
-    int action = mapIndexToAction(index);
-    switch (action) {
-      case 0:
-        addContact(addressResult.getNames(),
-                   addressResult.getNicknames(),
-                   addressResult.getPronunciation(),
-                   addressResult.getPhoneNumbers(),
-                   addressResult.getPhoneTypes(),
-                   addressResult.getEmails(),
-                   addressResult.getEmailTypes(),
-                   addressResult.getNote(),
-                   addressResult.getInstantMessenger(),
-                   address1,
-                   address1Type,
-                   addressResult.getOrg(),
-                   addressResult.getTitle(),
-                   addressResult.getURLs(),
-                   addressResult.getBirthday(),
-                   addressResult.getGeo());
-        break;
-      case 1:
-        String[] names = addressResult.getNames();
-        String title = names != null ? names[0] : null;
-        searchMap(address1, title);
-        break;
-      case 2:
-        dialPhone(addressResult.getPhoneNumbers()[0]);
-        break;
-      case 3:
-        sendEmail(addressResult.getEmails()[0], null, null);
-        break;
-      default:
-        break;
-    }
-  }
+//  @Override
+//  public int getButtonCount() {
+//    return buttonCount;
+//  }
+//
+//  @Override
+//  public int getButtonText(int index) {
+//    return BUTTON_TEXTS[mapIndexToAction(index)];
+//  }
+//
+//  @Override
+//  public void handleButtonPress(int index) {
+//    AddressBookParsedResult addressResult = (AddressBookParsedResult) getResult();
+//    String[] addresses = addressResult.getAddresses();
+//    String address1 = addresses == null || addresses.length < 1 ? null : addresses[0];
+//    String[] addressTypes = addressResult.getAddressTypes();
+//    String address1Type = addressTypes == null || addressTypes.length < 1 ? null : addressTypes[0];
+//    int action = mapIndexToAction(index);
+//    switch (action) {
+//      case 0:
+//        addContact(addressResult.getNames(),
+//                   addressResult.getNicknames(),
+//                   addressResult.getPronunciation(),
+//                   addressResult.getPhoneNumbers(),
+//                   addressResult.getPhoneTypes(),
+//                   addressResult.getEmails(),
+//                   addressResult.getEmailTypes(),
+//                   addressResult.getNote(),
+//                   addressResult.getInstantMessenger(),
+//                   address1,
+//                   address1Type,
+//                   addressResult.getOrg(),
+//                   addressResult.getTitle(),
+//                   addressResult.getURLs(),
+//                   addressResult.getBirthday(),
+//                   addressResult.getGeo());
+//        break;
+//      case 1:
+//        String[] names = addressResult.getNames();
+//        String title = names != null ? names[0] : null;
+//        searchMap(address1, title);
+//        break;
+//      case 2:
+//        dialPhone(addressResult.getPhoneNumbers()[0]);
+//        break;
+//      case 3:
+//        sendEmail(addressResult.getEmails()[0], null, null);
+//        break;
+//      default:
+//        break;
+//    }
+//  }
 
   private static Date parseDate(String s) {
     for (DateFormat currentFormat : DATE_FORMATS) {

@@ -36,6 +36,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.zxing.Result;
+import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.Contents;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.LocaleManager;
@@ -44,6 +45,7 @@ import com.google.zxing.client.android.book.SearchBookContentsActivity;
 import com.google.zxing.client.result.ParsedResult;
 import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
+import com.m6.model.biz.BizModel;
 import com.m6.o2o.R;
 
 /**
@@ -139,7 +141,7 @@ public abstract class ResultHandler {
    *
    * @return The integer button count.
    */
-  public abstract int getButtonCount();
+//  public abstract int getButtonCount();
 
   /**
    * The text of the nth action button.
@@ -147,7 +149,7 @@ public abstract class ResultHandler {
    * @param index From 0 to getButtonCount() - 1
    * @return The button text as a resource ID
    */
-  public abstract int getButtonText(int index);
+//  public abstract int getButtonText(int index);
 
 
   /**
@@ -155,7 +157,38 @@ public abstract class ResultHandler {
    *
    * @param index The button that was clicked.
    */
-  public abstract void handleButtonPress(int index);
+//  public abstract void handleButtonPress(int index);
+  
+	private static final int[] buttons = { 
+		R.string.button_product_search,
+		R.string.button_web_search, 
+		R.string.button_custom_product_search };
+	
+	public final int getButtonCount() {
+		return 3;
+	}
+
+	public final int getButtonText(int index) {
+		return buttons[index];
+	}
+
+	public final void handleButtonPress(int index) {
+		String text = getResult().getDisplayResult();
+		switch (index) {
+		case 0:
+			Intent intent = new Intent();
+			intent.putExtra(BizModel.ACTIVITY_RESULT, getDisplayContents());
+			getActivity().setResult(Activity.RESULT_OK, intent);
+			getActivity().finish();
+			break;
+		case 1:
+			((CaptureActivity) getActivity()).restartPreviewAfterDelay(0L);
+			break;
+		case 2:
+			getActivity().finish();
+			break;
+		}
+	}
 
   /**
    * Some barcode contents are considered secure, and should not be saved to history, copied to
