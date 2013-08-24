@@ -13,9 +13,16 @@
         android:id="@+id/scan_order"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:text="@string/scan_order" />
 
+    <EditText
+        android:id="@+id/input_no"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/scan_order_tip"
+        android:gravity="center" />
+    
     <TextView
         android:id="@+id/tip_order"
         android:layout_width="fill_parent"
@@ -61,21 +68,14 @@
         android:id="@+id/input_no_box"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="配送柜号"
-        android:gravity="center" />
-    
-    <EditText
-        android:id="@+id/input_no"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="配送单号"
+        android:hint="@string/scan_box_tip"
         android:gravity="center" />
     
     <Button
         android:id="@+id/unpacking"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:text="@string/unpacking" />
 
     <TextView

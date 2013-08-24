@@ -2,11 +2,11 @@ package com.m6.o2o;
 
 import java.lang.ref.WeakReference;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,7 +18,7 @@ import com.google.zxing.client.android.CaptureActivity;
 import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
 
-public class DeliverActivity extends Activity {
+public class DeliverActivity extends BaseActivity {
 
 	private String mResultContainerNo;
 	private String mResultDeliveryNo;
@@ -32,6 +32,7 @@ public class DeliverActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deliver);
+		setTitle(R.string.activity_title_open_box);
 		
 		findViewById(R.id.scan_order).setOnClickListener(new OnClickListener() {
 			
@@ -69,10 +70,21 @@ public class DeliverActivity extends Activity {
 				Editable boxNo = ((EditText) findViewById(R.id.input_no_box)).getText();
 				Editable deliveryNo = ((EditText) findViewById(R.id.input_no)).getText();
 				if (boxNo != null && deliveryNo != null) {
+					String deliveryNoText = deliveryNo.toString();
+					String boxNoText = boxNo.toString();
+					if (TextUtils.isEmpty(deliveryNoText)) {
+						Toast.makeText(DeliverActivity.this, R.string.toast_deliveryno_empty, Toast.LENGTH_LONG).show();
+						return;
+					}
+					
+					if (TextUtils.isEmpty(boxNoText)) {
+						Toast.makeText(DeliverActivity.this, R.string.toast_boxno_empty, Toast.LENGTH_LONG).show();
+						return;
+					}
+					
 					if (mOpenBoxTask == null) {
-						mOpenBoxTask = new OpenBoxTask(DeliverActivity.this, 
-								boxNo.toString(), 
-								deliveryNo.toString());
+						showProgressDialog(R.string.open_box_message);
+						mOpenBoxTask = new OpenBoxTask(DeliverActivity.this, boxNoText, deliveryNoText);
 						mOpenBoxTask.execute((Void) null);
 					}
 				}
@@ -84,25 +96,26 @@ public class DeliverActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && data != null) {
 			if (requestCode == RESULT_ORDER) {
-				TextView result = (TextView) findViewById(R.id.result_order);
 				mResultDeliveryNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
-				result.setText(mResultDeliveryNo);
-				
-				result.setVisibility(View.VISIBLE);
-				findViewById(R.id.tip_order).setVisibility(View.VISIBLE);
+				((EditText) findViewById(R.id.input_no)).setText(mResultDeliveryNo);
+//				TextView result = (TextView) findViewById(R.id.result_order);
+//				result.setText(mResultDeliveryNo);
+//				result.setVisibility(View.VISIBLE);
+//				findViewById(R.id.tip_order).setVisibility(View.VISIBLE);
 			} else if (requestCode == RESULT_BOX) {
-				TextView result = (TextView) findViewById(R.id.result_box);
 				mResultContainerNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
-				result.setText(mResultContainerNo);
-				
-				result.setVisibility(View.VISIBLE);
-				findViewById(R.id.tip_box).setVisibility(View.VISIBLE);
+				((EditText) findViewById(R.id.input_no_box)).setText(mResultContainerNo);
+//				TextView result = (TextView) findViewById(R.id.result_box);
+//				result.setText(mResultContainerNo);
+//				result.setVisibility(View.VISIBLE);
+//				findViewById(R.id.tip_box).setVisibility(View.VISIBLE);
 			}
 		}
 	}
 	
 	private void bindData(ResponseData responseData) {
 		mOpenBoxTask = null;
+		dismissProgressDialog();
 		if (responseData.getFlag() == 1) { // success
 			Toast.makeText(this, R.string.openbox_success, Toast.LENGTH_SHORT).show();
 		} else {
@@ -116,6 +129,7 @@ public class DeliverActivity extends Activity {
 	
 	private void onCancel() {
 		mOpenBoxTask = null;
+		dismissProgressDialog();
 	}
 	
 	private static class OpenBoxTask extends AsyncTask<Void, Void, ResponseData> {

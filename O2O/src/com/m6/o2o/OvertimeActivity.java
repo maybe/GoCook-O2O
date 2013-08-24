@@ -2,11 +2,11 @@ package com.m6.o2o;
 
 import java.lang.ref.WeakReference;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,7 +18,7 @@ import com.google.zxing.client.android.CaptureActivity;
 import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
 
-public class OvertimeActivity extends Activity {
+public class OvertimeActivity extends BaseActivity {
 
 	private String mResultContainerNo;
 	
@@ -30,6 +30,7 @@ public class OvertimeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_overtime);
+		setTitle(R.string.activity_title_overtime_open_box);
 		
 		findViewById(R.id.scan_box).setOnClickListener(new OnClickListener() {
 			
@@ -57,7 +58,14 @@ public class OvertimeActivity extends Activity {
 				// TODO  Test
 				Editable boxNo = ((EditText) findViewById(R.id.input_no)).getText();
 				if (boxNo != null) {
+					String boxNoText = boxNo.toString();
+					if (TextUtils.isEmpty(boxNoText)) {
+						Toast.makeText(OvertimeActivity.this, R.string.toast_boxno_empty, Toast.LENGTH_LONG).show();
+						return;
+					}
+					
 					if (mTimeOutTask == null) {
+						showProgressDialog(R.string.open_box_message);
 						mTimeOutTask = new TimeOutTask(OvertimeActivity.this, boxNo.toString());
 						mTimeOutTask.execute((Void) null);
 					}
@@ -70,18 +78,19 @@ public class OvertimeActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && data != null) {
 			if (requestCode == RESULT_BOX) {
-				TextView result = (TextView) findViewById(R.id.result_box);
 				mResultContainerNo = data.getCharSequenceExtra(BizModel.ACTIVITY_RESULT).toString();
-				result.setText(mResultContainerNo);
-				
-				result.setVisibility(View.VISIBLE);
-				findViewById(R.id.tip_box).setVisibility(View.VISIBLE);
+				((EditText) findViewById(R.id.input_no)).setText(mResultContainerNo);
+//				TextView result = (TextView) findViewById(R.id.result_box);
+//				result.setText(mResultContainerNo);
+//				result.setVisibility(View.VISIBLE);
+//				findViewById(R.id.tip_box).setVisibility(View.VISIBLE);
 			}
 		}
 	}
 	
 	private void bindData(ResponseData responseData) {
 		mTimeOutTask = null;
+		dismissProgressDialog();
 		if (responseData.getFlag() == 1) { // success
 			Toast.makeText(this, R.string.overtime_openbox_success, Toast.LENGTH_SHORT).show();
 		} else {
@@ -95,6 +104,7 @@ public class OvertimeActivity extends Activity {
 	
 	private void onCancel() {
 		mTimeOutTask = null;
+		dismissProgressDialog();
 	}
 	
 	private static class TimeOutTask extends AsyncTask<Void, Void, ResponseData> {
