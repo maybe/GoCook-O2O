@@ -45,4 +45,6 @@
     <string name="toast_deliveryno_empty">请扫描或输入配送单号</string>
     <string name="toast_boxno_empty">请扫描或输入配送柜号</string>
     
+    <string name="network_error_tip">请检查网络连接状况</string>
+    
 </resources>

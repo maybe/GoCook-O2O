@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
+import com.m6.util.NetUtils;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -90,6 +92,11 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
+		if (!NetUtils.isOnline(this)) {
+			Toast.makeText(this, R.string.network_error_tip, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		if (mAuthTask != null) {
 			return;
 		}

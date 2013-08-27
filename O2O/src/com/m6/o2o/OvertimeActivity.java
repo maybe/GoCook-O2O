@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.zxing.client.android.CaptureActivity;
 import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
+import com.m6.util.NetUtils;
 
 public class OvertimeActivity extends BaseActivity {
 
@@ -54,6 +55,11 @@ public class OvertimeActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
+				if (!NetUtils.isOnline(OvertimeActivity.this)) {
+					Toast.makeText(OvertimeActivity.this, R.string.network_error_tip, Toast.LENGTH_SHORT).show();
+					return;
+				}
+				
 //				new TimeOutTask(OvertimeActivity.this, mResultContainerNo).execute((Void) null);
 				// TODO  Test
 				Editable boxNo = ((EditText) findViewById(R.id.input_no)).getText();

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.zxing.client.android.CaptureActivity;
 import com.m6.model.base.ResponseData;
 import com.m6.model.biz.BizModel;
+import com.m6.util.NetUtils;
 
 public class DeliverActivity extends BaseActivity {
 
@@ -65,6 +66,11 @@ public class DeliverActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
+				if (!NetUtils.isOnline(DeliverActivity.this)) {
+					Toast.makeText(DeliverActivity.this, R.string.network_error_tip, Toast.LENGTH_SHORT).show();
+					return;
+				}
+				
 //				new OpenBoxTask(DeliverActivity.this, mResultContainerNo, mResultDeliveryNo).execute((Void) null);
 				// TODO  Test
 				Editable boxNo = ((EditText) findViewById(R.id.input_no_box)).getText();
