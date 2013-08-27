@@ -60,8 +60,10 @@ public class OvertimeActivity extends BaseActivity {
 					return;
 				}
 				
-//				new TimeOutTask(OvertimeActivity.this, mResultContainerNo).execute((Void) null);
-				// TODO  Test
+				// hide error info
+				findViewById(R.id.error).setVisibility(View.GONE);
+				findViewById(R.id.tip_error).setVisibility(View.GONE);
+				
 				Editable boxNo = ((EditText) findViewById(R.id.input_no)).getText();
 				if (boxNo != null) {
 					String boxNoText = boxNo.toString();

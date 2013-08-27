@@ -71,8 +71,10 @@ public class DeliverActivity extends BaseActivity {
 					return;
 				}
 				
-//				new OpenBoxTask(DeliverActivity.this, mResultContainerNo, mResultDeliveryNo).execute((Void) null);
-				// TODO  Test
+				// hide error info
+				findViewById(R.id.error).setVisibility(View.GONE);
+				findViewById(R.id.tip_error).setVisibility(View.GONE);
+				
 				Editable boxNo = ((EditText) findViewById(R.id.input_no_box)).getText();
 				Editable deliveryNo = ((EditText) findViewById(R.id.input_no)).getText();
 				if (boxNo != null && deliveryNo != null) {
