@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,6 +13,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -78,12 +82,50 @@ public class LoginActivity extends Activity {
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						attemptLogin();
-					}
-				});
+			new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					attemptLogin();
+				}
+			});
+		
+		findViewById(R.id.sign_in_button).setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				final EditText ipEditText = new EditText(LoginActivity.this);
+				
+				AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this)
+		        .setTitle(R.string.biz_main_dialog_pwd_title)
+		        .setView(ipEditText)
+		        .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int whichButton) {
+		            	((ViewGroup) ipEditText.getParent()).removeAllViews();
+		            	if ("123456".equals(ipEditText.getText().toString())) {
+		            		ipEditText.setText("");
+		            		new AlertDialog.Builder(LoginActivity.this)
+		            		.setTitle(R.string.biz_main_dialog_ip_title)
+		            		.setView(ipEditText)
+		            		.setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
+		            			public void onClick(DialogInterface dialog, int whichButton) {
+		            				BizModel.updateIp(ipEditText.getText().toString());
+		            			}
+		            		})
+		            		.setNegativeButton(R.string.cancel, null)
+		            		.create()
+		            		.show();
+		            		dialog.dismiss();
+		            	} else {
+		            		Toast.makeText(LoginActivity.this, R.string.biz_main_dialog_pwd_error, Toast.LENGTH_SHORT).show();
+		            	}
+		            }
+		        })
+		        .setNegativeButton(R.string.cancel, null)
+		        .create();
+				dialog.show();
+				return true;
+			}
+		});
 	}
 
 	/**

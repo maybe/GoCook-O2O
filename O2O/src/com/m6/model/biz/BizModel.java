@@ -3,6 +3,7 @@ package com.m6.model.biz;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.text.TextUtils;
 
 import com.m6.model.base.Cmd;
 import com.m6.model.base.Flag;
@@ -19,8 +20,18 @@ public class BizModel {
 	public static final String ACTIVITY_RESULT = "result_barcode";
 	
 //	private static final String REQUEST_URL = "http://o.m6fresh.com/m6o2o/ws/app.ashx";
-	private static final String REQUEST_URL = "http://o.m6fresh.com/ws/app.ashx";
+	private static String BASE_URL_DOMAIN = "o.m6fresh.com";
+//	private static final String REQUEST_URL = "http://" + BASE_URL_DOMAIN + "/ws/app.ashx";
 
+	public static void updateIp(String ip) {
+		if (!TextUtils.isEmpty(ip)) {
+			BASE_URL_DOMAIN = ip.trim();
+		}
+	}
+	
+	private static String getUrl() {
+		return "http://" + BASE_URL_DOMAIN + "/ws/app.ashx";
+	}
 	
 	public static String getStaffId(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -44,7 +55,7 @@ public class BizModel {
 	public static ResponseData login(String account, String password) {
 		CLoginInfo cLoginInfo = new CLoginInfo(account, password);
 		RequestData requestData = new RequestData(Cmd.DISPATCHER_AUTHEN, cLoginInfo);
-		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
+		String result = NetUtils.httpPost(getUrl(), requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
 		return responseData;
 	}
@@ -52,7 +63,7 @@ public class BizModel {
 	public static ResponseData openBox(String staffId, String containerNo, String deliveryNo) {
 		DeliveryOpenBoxInfo openBoxInfo = new DeliveryOpenBoxInfo(staffId, containerNo, deliveryNo);
 		RequestData requestData = new RequestData(Cmd.UNPACKING, openBoxInfo);
-		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
+		String result = NetUtils.httpPost(getUrl(), requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
 		return responseData;
 	}
@@ -60,7 +71,7 @@ public class BizModel {
 	public static ResponseData timeOut(String staffId, String containerNo) {
 		DeliveryOpenTimeOutBoxInfo timeOutBoxInfo = new DeliveryOpenTimeOutBoxInfo(staffId, containerNo);
 		RequestData requestData = new RequestData(Cmd.OVERTIME, timeOutBoxInfo);
-		String result = NetUtils.httpPost(REQUEST_URL, requestData.getPostData());
+		String result = NetUtils.httpPost(getUrl(), requestData.getPostData());
 		ResponseData responseData = new ResponseData(result);
 		return responseData;
 	}

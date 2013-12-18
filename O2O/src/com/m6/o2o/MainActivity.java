@@ -1,15 +1,14 @@
 package com.m6.o2o;
 
-import com.m6.model.biz.BizModel;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.m6.model.biz.BizModel;
 
 public class MainActivity extends Activity {
 
