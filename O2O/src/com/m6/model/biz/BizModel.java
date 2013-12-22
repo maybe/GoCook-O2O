@@ -19,9 +19,10 @@ public class BizModel {
 	
 	public static final String ACTIVITY_RESULT = "result_barcode";
 	
-//	private static final String REQUEST_URL = "http://o.m6fresh.com/m6o2o/ws/app.ashx";
-	private static String BASE_URL_DOMAIN = "o.m6fresh.com";
+//	private static final String REQUEST_URL = "http://o2o.m6fresh.com/m6o2o/ws/app.ashx";
 //	private static final String REQUEST_URL = "http://" + BASE_URL_DOMAIN + "/ws/app.ashx";
+//	private static String BASE_URL_DOMAIN = "o2o.m6fresh.com";
+	private static String BASE_URL_DOMAIN = "192.168.1.91";
 
 	public static void updateIp(String ip) {
 		if (!TextUtils.isEmpty(ip)) {
@@ -29,8 +30,9 @@ public class BizModel {
 		}
 	}
 	
-	private static String getUrl() {
+	public static String getUrl() {
 		return "http://" + BASE_URL_DOMAIN + "/ws/app.ashx";
+//		return "http://192.168.1.91/ws/app.ashx";
 	}
 	
 	public static String getStaffId(Context context) {

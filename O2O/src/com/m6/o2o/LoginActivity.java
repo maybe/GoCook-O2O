@@ -109,6 +109,9 @@ public class LoginActivity extends Activity {
 		            		.setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
 		            			public void onClick(DialogInterface dialog, int whichButton) {
 		            				BizModel.updateIp(ipEditText.getText().toString());
+		            				Toast.makeText(LoginActivity.this, 
+		            						getString(R.string.biz_main_dialog_newip_tip, BizModel.getUrl()), 
+		            						Toast.LENGTH_LONG).show();
 		            			}
 		            		})
 		            		.setNegativeButton(R.string.cancel, null)
